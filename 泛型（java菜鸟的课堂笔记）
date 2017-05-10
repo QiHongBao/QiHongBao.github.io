@@ -1,0 +1,268 @@
+ 
+1. 泛型的简单运 用和意义
+ 
+2. 泛型的上限与下限
+ 
+3. 泛型和 子类继承的限制
+ 
+4. 泛型类和泛型 方法
+ 
+5. 泛型嵌套和泛型擦除
+ 
+ 
+ 
+ 
+ 
+ 
+泛型(Generic)
+ 
+ 
+ 
+什 么是泛型:
+ 
+•java5开始出现的 一种对Java语 言类型的 一种拓 展,以 支持创建可以按类型进 行 参数化的类.可以把类型参数看作是使 用参数类型时指定的类型占位符,就好 比 方法的形式参数是实际参数的占位符 一样.
+ 
+•泛型能保证 大型应 用程序的类型安全和良好的维护性;使 用泛型的优势:
+•类型安全,使编译器 对泛型定义的类型做判断限制.如保证TreeSet 里 的元素类型
+ 
+必须 一致;
+ 
+•消除强制类型的转换,如,使 用Comparable 比较时每次都需要类型强转;
+ 
+ 
+泛型类
+ 
+ 
+ 
+在类声明时通过 一个标识符表示类中某个字段的类型或者某个 方法的返回值或参数的类型，这样在类声明或实例 化的时候只要指定 自 己需要的类型就ok。
+ 
+ 
+声明带泛型的类: class 类名<泛型类型1,泛型类型2……>{
+ 
+泛型类型 变量 名；泛型类型  方法名(){}
+返回值类型  方法名(泛型类型 变量 名){}
+ 
+ 
+}
+ 
+ 
+ 
+使 用带泛型的类：
+ 
+类名<具体类> 对象名 = new 类名<具体类>();
+ 
+ 
+注意：
+ 
+类型参数规范：推荐使 用规范-常 见的泛型,泛型只保存在源 文件中,class 文件中不 存在;也就是说在编译阶段就会丢失,基本数据类型不 能作为泛型类型;
+ 
+K 键， 比如映射的键 key的类型
+ 
+V  值， 比如Map的值 value类型
+ 
+E  元素， 比如Set<E>  Element表示元素,元素的类型
+ 
+T 泛型，Type的意思
+ 
+ 
+思考List<Object> l   和 List<String> l 是否可以运 行
+ 
+ 
+通配符
+ 
+ 
+ 
+在进 行 引 用传递的时候泛型类型必须匹配才可以传递，否则编译不 通过；使 用 ？ ，表示未知类型的泛型对象：
+•List<?> 表示未知元素的List集合；
+ 
+•这种带通配符的List仅表示各种泛型List的 父类，并不 能把元素添加 入集合中；
+ 
+•List<?> list = new ArrayList<>(); list.add(1);//ERROR 编译器  无法基于信息作类型推断
+public void show(List<?> list){}
+ 
+•//表示可接受任意类型的List集合
+ 
+ 
+泛型的上限与下限
+ 
+设置泛型对象的上限使 用extends,表示参数类型只能是该类型或该类型的 子类：
+ 
+•声明对象：类名<? extends 类> 对象名
+ 
+•定义类：类名<泛型标签 extends 类>{}
+ 
+设置泛型对象的下限使 用super,表示参数类型只能是该类型或该类型的 父类：
+ 
+•声明对象：类名<? super 类> 对象名称
+ 
+•定义类：类名<泛型标签 extends类>{}
+ 
+ 
+public static void  show(List<? extends Number> l){
+ 
+}
+ 
+public static void  show(List<? super String> l){
+ 
+}
+ 
+ 
+ 
+ 
+public static void main(String[] args) { Person<Integer> p1 = new Person<>(); p1.setVal(99);
+ 
+Person<Double> p2 = new Person<>(); p2.setVal(3.14);
+ 
+Person<String> p3 = new Person<>(); p3.setVal("007");
+ 
+show(p1);//√ show(p2);//√ show(p3);//×
+ 
+}
+ 
+public static void show(Person<? extends Number> p){ System.out.println(p.getVal());
+ 
+}
+ 
+ 
+ 
+ 
+public static void main(String[] args) { Person<Integer> p1 = new Person<>(); p1.setVal(99);//Integer Person<Double> p2 = new Person<>(); p2.setVal(3.14);//Double
+ 
+Person<String> p3 = new Person<>(); p3.setVal("007");//String Person<Object> p4 = new Person<>(); p4.setVal(new Object());//Object show(p1);//×
+ 
+show(p2);//× show(p3);//√ show(p4);//√
+ 
+}
+ 
+public static void show(Person<? super String> p){ System.out.println(p.getVal());
+ 
+}
+ 
+ 
+泛型接 口
+ 
+ 
+ 
+ 
+ 
+ 
+java5后，可以声明泛型接 口，声明 方式和声明泛型类是 一样的。
+ 
+•public interface IDAO<T>{}
+ 
+泛型接 口 子类有两种 方式：
+ 
+•直接在 子类后申明泛型；
+ 
+•在 子类实现的接 口中给出具体的泛型类型
+ 
+ 
+ 
+ 
+public class DaoImpl<T> implements IDAO<T>{
+ 
+}
+ 
+public class DaoImpl implements IDAO<String> {
+ 
+}
+ 
+泛型 方法
+ 
+ 方法中可定义泛型参数，形参的参数类型就是实参的类型。格式：
+•<泛型标签> 返回值类型  方法名([泛型标签 参数]...)
+ 
+public static <T> T show(T param){ return param;
+}
+ 
+.....main.....{ System.out.println(show(new Date())); System.out.println(show("cditcast"));
+ 
+}
+ 
+ 
+泛型使 用
+ 
+ 
+通过泛型 方法返回泛型对象
+ 
+•此时必须在 方法返回类型处明确给出具体类型统 一传 入的参数类型泛型数组
+ 
+ 
+ 
+public <T> T[] show(T[] ts) {
+ 
+}
+ 
+public <T> void show(T ... ts){
+ 
+ 
+}
+ 
+ 
+ 
+ 
+ 
+泛型的嵌套
+ 
+ 
+可以从 一个类的泛型中指向另 一个类的泛型：
+ 
+ 
+public class Demo1 {
+ 
+public static void main(String[] args) { Map<String,String> map = new HashMap<>(); map.put("1", "A");
+ 
+map.put("2", "B"); map.put("3", "C"); map.put("4", "D");
+ 
+Set<Map.Entry<String, String>> set = map.entrySet(); Iterator<Map.Entry<String, String>> it = set.iterator(); while(it.hasNext()) {
+ 
+Map.Entry<String, String> entry = it.next(); System.out.println(entry.getKey() +"-->" + entry.getValue());
+ 
+}
+ 
+}
+ 
+}
+ 
+ 
+泛型的擦除
+ 
+ 
+在严格的泛型代码 里 ，带泛型声明的类总应该带着类型参数。但是为了 和 老 的Java代码保持 一致，也允许在使 用带泛型声明的类时不 指定类型参数，若没有为这个泛型类指定类型参数则该类型参数被称做 一个原始类型，默认是该声明参数时指定的最上限类型；
+ 
+当把 一个具有泛型信息的对象赋给另 一个没有泛型信息的变量 时，则所有在尖括号之间的类型信息都被扔掉。
+ 
+• 比如List<String> 类型转换成List，则该List对集合元素的类型检查变成了 变量 的上限即Object。
+ 
+ 
+ 
+泛型的擦除和转换
+ 
+ 
+class Num<T extends Number>{
+private T t;
+public Num(T t) {
+this.t= t;
+}
+。。。。 getter/setter。。。。
+}
+public class Demo{
+public static void main(String[] args) {
+Num<Integer> n= new Num<>(5);
+Integer i= n.getT();
+Num n2 = n;//会丢掉泛型信息
+Number num= n2.getT();
+//Integer i= n2.getT();
+}
+}
+public class Demo{
+public static void main(String[] args) {
+List<Integer> li= new ArrayList<>();
+li.add(1);
+List<String> ls= null;
+//ls= li;不能转换
+List list= li;
+ls= list;//不会报错,只有未经检查警告,此时l ist实际引用的是List<Integer>
+System.out.println("-->" + ls.get(0));//企图当做String类型对象取出
+}
+}
