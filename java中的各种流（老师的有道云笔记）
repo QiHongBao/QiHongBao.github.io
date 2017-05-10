@@ -1,0 +1,461 @@
+内存操作流-字节
+之前的文件操作流是以文件的输入输出为主的，当输出的位置变成了内存，那么就称为内存操作流。此时得使用内存流完成内存的输入和输出操作。
+如果程序运行过程中要产生一些临时文件，可采用虚拟文件方式实现；
+直接操作磁盘的文件很耗性能,使用内存流可以提升性能;jdk里提供了内存流可实现类似于内存虚拟文件的功能。
+•ByteArrayInputStream：将内容写到内存中
+•ByteArrayOutputStream：将内存中的数据写出
+ByteArrayInputStream：构造方法：
+•public ByteArrayInputStream(byte[] buf):全部内容
+•public ByteArrayInputStream(byte[] buf,int offset,int length)：指定范围的内容
+ByteArrayOutputStream:
+•public ByteArrayOutputStream()
+public class ByteArrayDemo {
+　　public static void main(String[] args) throws Exception {
+　　　　String info = "helloworld";
+　　　　InputStream input = new ByteArrayInputStream(info.getBytes());
+　　　　OutputStream output = new ByteArrayOutputStream();
+　　　　int temp = 0;
+　　　　while ((temp = input.read()) != -1) {
+　　　　　　output.write(Character.toUpperCase((char) temp));
+　　　　}
+　　　　String str = output.toString(); // 取出内容
+　　　　input.close() ;//关闭无用
+　　　　output.close() ;//无效
+　　　　System.out.println(str) ;
+　　}
+}
+打印流
+思考：如果现在要想完成一个字符串或者是boolean型或者是字符型的数据输出使用OutputStream
+是否方便？
+肯定是不方便的，因为OutputStream中只能操作字节数据，所以其他的数据类型很难操作，那么
+在Java的IO包中为了解决这种问题增加了两种类：PrintStream、PrintWriter。
+打印流有非常好的打印功能，可以打印任何的数据类型。如，整数，小数，字符串等。
+观察PrintStream类的构造：
+public PrintStream(File file) throws FileNotFoundException
+public PrintStream(OutputStream out)
+•虽然PrintStream是OutputStream的子类，但是在实例化的时候依然需要一个
+OutputStream的对象。
+与其他输出流不同，PrintStream 永远不会抛出 IOException；
+。另外，为了自动刷新，可以创建一个 PrintStream；这意味着可在写入 byte 数组之后自动调用
+flush 方法，可调用其中一个 println 方法，或写入一个换行符或字节 ('\n')。
+public PrintStream(OutputStream out) {//不自动刷新
+　　this(out, false);
+}
+PrintWriter和PrintStream都属于输出流，分别针对字符和字节。
+PrintWriter和PrintStream重载的print()和println()用于多种数据类型的输出。
+•print()里的参数不能为空；println()可以
+PrintWriter和PrintStream输出操作不抛出异常
+PrintStream调用println方法有自动flush功能;
+public class PrintStreamDemo {
+　　public static void main(String[] args) throws Exception {
+　　　　PrintStream out = new PrintStream(new FileOutputStream(new File("d:"+ File.separator + "test.txt")));
+　　　　out.print(3 + " + " + 2 + " = ");
+　　　　out.println(2 + 3);
+　　　　out.println("Hello itcast!") ;
+　　　　out.close();
+　　}
+}
+Java5后，PrintStream类多了printf()方法用于格式化输出操作。但是格式化输出的时候必须指定输
+出数据的类型：
+字符 描述
+%s 表示内容是字符串
+%d 表示内容是整数
+%f 表示内容是小数
+%c 表示内容是字符
+当然你也可以全部使用“%s”来表示所有的数据类型
+public class Demo {
+　　public static void main(String[] args) {
+　　　　String s1 = "村长";
+　　　　int age = 17;
+　　　　float pi = 3.14F;
+　　　　char c = 'U';
+　　　　System.out.printf("名字： %s, 年龄： %d, PI= %f, 字符： %c",s1,age,pi,c);
+　　　　System.out.printf("名字： %s, 年龄： %s, PI= %s, 字符： %s", s1,age,pi,c);
+　　}
+}
+管道流又称为线程通讯流，主要作用是可以进行两个线程之间的通讯：
+•PipedOutputStream：管道输出流
+•PipedInputStream：管道输入流
+PipedOutputStream中有方法:
+•void connect(PipedInputStream pis) throws IOException:用于连接管道
+PipedInputStream中有方法:
+•void connect(PipedOutputStream pos) throws IOException:用于连接管道
+发送端
+class Send implements Runnable{
+　　private PipedOutputStream pos = null;
+　　　　public Send() {
+　　　　　　pos = new PipedOutputStream();
+　　　　}
+　　　　public PipedOutputStream getPos() {
+　　　　　　return pos;
+　　　　}
+　　public void run() {
+　　　　String s =“峰峰邀班花看村长家喂的猪";
+　　　　pos.write(s.getBytes());
+　　　　pos.close();
+　　}
+}
+接收端
+class Receive implements Runnable{
+　　private PipedInputStream pis = null;
+　　public Receive() {
+　　　　pis = new PipedInputStream();
+　　}
+　　public PipedInputStream getPis() {
+　　　　return pis;
+　　}
+　　public void run() {
+　　　　byte[] bys = new byte[1024];
+　　　　int len = pis.read(bys);
+　　　　pis.close();
+　　　　System.out.println("-->" + new String(bys,0,len));
+　　}
+}
+public class PipedDemo {
+　　public static void main(String[] args) {
+　　　　Send send = new Send();
+　　　　Receive rec = new Receive();
+　　　　try {
+　　　　　　send.getPos().connect(rec.getPis());
+　　　　} catch (IOException e) {
+　　　　　　e.printStackTrace();
+　　　　}
+　　　　new Thread(send).start();
+　　　　new Thread(rec).start();
+　　}
+}
+处理流
+节点流：
+•可以从或向特定的地方读写数据。用于直接操作目标设备所对应的流类。节点流类所对应
+的IO源或目标称为流节点。
+处理流：
+•对已存在的流的连接和封装，通过封装流的功能调用实现数据读写。处理流的构造方法总会带一个其他流对象作参数，⼀一个流对象经过其他流的多次包装，称为流的链接。
+•当使用处理流的时候，在关闭输入/输出资源时。只需要关闭上层流即可。因为当关闭上层
+流的时候系统会默认去关闭被处理的节点流。
+缓冲流
+缓冲流要“套接”在相应的节点流之上，对读写的数据提供了缓冲的功能，提高了读写效率，同时增加了一些新的方法。
+四种缓冲流
+•BufferedReader(Reader in)
+•BufferedReader(Reader in,int sz)//sz表示自定义缓冲区大小
+•BufferedWriter(Writer out)
+•BufferedWriter(Writer out,int sz)
+•BufferedInputStream(InputStream in)
+•BufferedInputStream(InputStream in,int sz)
+•BufferedOutputStream(OutputStream out)
+•BufferedOutputStream(OutputStream out,int sz)
+BufferedReader提供readLine方法用于读取一行字符串。
+BufferedWriter提供了newLine方法用于写入一个行分隔符。等价于//.writer("\r\n");
+对于输出的缓冲流，写出的数据会先在内存中缓冲，使用flush方法将会使内存中的数据立刻写出。
+public static void main(String[] args)throws Exception {
+　　BufferedReader br = new BufferedReader(new FileReader("test.txt"));
+　　BufferedWriter bw = new BufferedWriter(new FileWriter("AA.txt"));
+　　String line = null;
+　　while((line = br.readLine()) != null){//读一行
+　　　　bw.write(line);//写一行
+　　　　bw.newLine();//写完一行就换行
+　　}
+　　bw.close();
+　　br.close();
+}
+转换流
+字节流---->字符流
+•InputStreamReader 字节输入流-->字符输入流
+•OutputStreamWriter 字节输出流-->字符输出流
+InputStreamReader 需要和InputStream“套接”；
+OutputStreamWriter 需要和OutputStream“套接”
+转换流在构造时可以指定其编码集合：
+•InputStreamReader in = new InputStreamReader(Sytem.in,"ISO8859_1");
+为了达到最高效率，可要考虑在 BufferedReader 内包装 InputStreamReader。例如：
+•BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+public static void main(String[] args) {
+　　try {
+　　　　OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream("path"));
+　　　　osw.write("mircosoftibmsunapplehp");
+　　　　System.out.println(osw.getEncoding());
+　　　　osw.close();
+　　　　osw = new OutputStreamWriter(new FileOutputStream("path", true),"ISO8859_1"); // latin-1
+　　　　osw.write("mircosoftibmsunapplehp");
+　　　　System.out.println(osw.getEncoding());
+　　　　osw.close();
+　　} catch (IOException e) {
+　　　　e.printStackTrace();
+　　}
+}
+public static void main(String args[]) {
+　　InputStreamReader isr =new InputStreamReader(System.in);
+　　BufferedReader br = new BufferedReader(isr);
+　　String s = null;
+　　try {
+　　　　s = br.readLine();
+　　　　while(s!=null){
+　　　　　　if(s.equalsIgnoreCase("exit")) break;
+　　　　　　System.out.println(s.toUpperCase());
+　　　　　　s = br.readLine();
+　　　　}
+　　　　br.close();
+　　} catch (IOException e) {
+　　　　e.printStackTrace();
+　　}
+}
+数据操作流
+和平台无关的数据操作流：
+DataInputStream 和 DataOutputStream分别继承于InputStream 和 OutputStream，属于处理流，
+需要分别“套接”在InputStream 和OutputStream类型的节点流上。
+DataInputStream 和DataOutputStream提供了可以存储Java原始类型数据(如int,boolean等)的方
+法。
+构造方法：
+•DataInputStream(InputStream in)
+•DataOutputStream(OutputStream out);
+/**
+* 数据流
+*
+* 读取的顺序 要和 录入的顺序一致，
+*
+*
+*/
+public class DataOutputStreamDemo {
+　　public static void main(String[] args) throws Exception {
+　　　　ByteArrayOutputStream baos = new ByteArrayOutputStream();
+　　　　DataOutputStream dos = new DataOutputStream(baos);
+　　　　double d = Math.random();
+　　　　System.out.println("-->"+d);
+　　　　dos.writeDouble(d);
+　　　　dos.writeBoolean(true);
+　　　　dos.writeFloat(3.14f);
+　　　　ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+　　　　DataInputStream dis = new DataInputStream(bais);
+　　　　System.out.println(dis.readBoolean());// true
+　　　　System.out.println(dis.readDouble());// 随机数
+　　　　System.out.println(dis.readFloat());
+　　　　dos.close();
+　　　　dis.close();
+　　}
+}
+合并流
+SequenceInputStream：
+将两个文件的内容合并成一个文件
+该类提供的方法：
+•SequenceInputStream(InputStream s1, InputStream s2) ：根据两个字节输入流对象来创
+建合并流对象。
+public class SequenceInputStreamDemo {
+　　public static void main(String[] args) {
+　　　　String src1 = "d:/a.txt";
+　　　　String src2 = "d:/b.txt";
+　　　　String dest = "d:/ab.txt";
+　　　　try (
+　　　　InputStream is1 = new FileInputStream(src1);
+　　　　InputStream is2 = new FileInputStream(src2);
+　　　　OutputStream os = new FileOutputStream(dest);
+　　　　SequenceInputStream sis = new SequenceInputStream(is1, is2);
+　　　　) {　　
+　　　　　　　　byte[] bys = new byte[1024];
+　　　　　　　　int len = 0;
+　　　　　　　　while ((len = sis.read(bys)) != -1) {
+　　　　　　　　os.write(bys, 0, len);
+　　　　　　}
+　　　　} catch (Exception e) {
+　　　　　　e.printStackTrace();
+　　　　}
+　　}
+}
+字符编码
+常见的编码ISO8859-1,utf-8,Unicode,GBK,GB2312,GB18030;
+ISO8859-1又称Latin-1或“西欧语言”,属于单字节编码,最多只能表示0~255,英文系统中使用,不支持中文;
+gbk/gb2312/gb18030:中国的国际编码，专用来表示汉字,双字节编码,GBK表示中文简体和繁体,
+gb2312表示简体,GBK兼容gb2312。gb18030是GBK编码的增强版;
+unicode：java使用的此编码，也是最标准的一种编码,使用十六进制表示编码，但是不兼容
+ISO8859-1。
+UTF-8：由于unicode不支持lantin-1,且易占用更多空间，对于英文字母也需要两个字节编码，这样
+不便于传输和存储，此时UTF码就应运而生，它可表示所有语言文字。不过UTF是不定长编
+码，每个字符的长度从1-6字节不等，一般网页中使用该编码。
+字符串的编码:String --- > byte[]
+字符串的解码:byte[] --- > String
+乱码的产生:解码和编码不一致
+编码:String --- > byte[]
+解码:byte[] --- > String
+乱码:解码和编码不一致
+程序中一定要处理好编码，否则会出现乱码。比如本机默认编码是GBK而在程序中使用了ISO8859-1编码，则会出现乱码。
+•查看系统默认编码
+public class Demo {
+　　public static void main(String[] args) {
+　　　　Properties p = System.getProperties();
+　　　　p.list(System.out);
+　　　　System.out.println(System.getProperty("file.encoding"));
+　　}
+}
+对象序列化
+就是把对象变成二进制的数据流的一种方式，其目的可以方便的实现对象的传输或存储。
+若一个类的对象需要被序列化，其类就必须实现java.io.Serializable接口。
+对象系列化和反序列化 （网络编程讲）
+若对对象输入输出，得使用对象操作流
+•ObjectInputStream：对象输入流
+•ObjectOutputStream：对象输出流
+使⽤用对象操作流输出序列化对象过程：
+•我们称为对象序列化，若不希望某个属性被序列化则用transient修饰属性
+•若类中的自动式静态的,则不能被序列化;
+•若类中某引用类型字段的类没有实现 Serializable,该字段也是不能序列化的;
+使用对象操作流输入序列化对象过程：
+•我们称为对象的反序列化
+在对象序列化和反序列化时需考虑JDK版本问题，我们一般注入serialVersionUID 常量，当反序列化时，JVM会把传过来的字节流中的serialVersionUID 与本地对应类的serialVersionUID 相比较，若一致则可以反序列化，否则，抛出异常
+对象操作流- ObjectOutputStream
+用于输出对象
+常用方法：
+•ObjectOutputStream(OutputStream out) 创建写入指定 OutputStream 的
+ObjectOutputStream对象。
+•void writeObject(Object obj) 输出对象。
+public static void main(String[] args) {
+　　String path = "D:/obj.txt";
+　　try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));) {
+　　　　oos.writeObject(new Student("will", 99));
+　　} catch (Exception e) {
+　　　　e.printStackTrace();
+　　}
+}
+对象操作流- ObjectInputStream
+把被序列化的对象给反序列化回来。
+常用方法：
+•ObjectInputStream(InputStream in)
+•Object readObject() 读取对象。
+public static void main(String[] args) {
+　　String path = "D:/obj.txt";
+　　try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path));) {
+　　　　Object o = ois.readObject();
+　　　　System.out.println(o);
+　　} catch (Exception e) {
+　　　　e.printStackTrace();
+　　}
+}
+压缩流
+我们经常使用WinRAR或WinZIP压缩文件，压缩后方便传输。
+Java中我们提供了专门的压缩流来将文件或文件夹压缩成jar,zip,gzip等格式。
+压缩流的实现
+压缩流的操作类都处于java.uti.zip中;
+在java中要实现zip的压缩需要使用包中的ZipFile,ZipOutputStream,ZipInputStream,ZipEntry类。
+jar和文件格式的压缩输入，输出流
+•jar压缩输出流：JarOutputStream
+•jar压缩输入流：JarInputStream
+•jar文件：JARFile
+•jar实体：JarEntry
+gzip用于unix系统的文件压缩，Linux中经常使用到*.gz就是gzip格式。
+•GZIP压缩输出流：GZIPOutputStream
+•GZIP压缩输入流：GZIPInputStream
+ZipEntry & ZipOutputStream
+ZipEntry用于表示 ZIP 文件条目,也就是压缩文件中的每一个子文件。
+•ZipEntry(String name)使用指定ZipEntry名称创建新的 ZipEntry对象。
+•boolean isDirectory()判断该ZipEntry是不是目录。
+ZipOutputStream用于完成一个文件或文件夹的压缩。
+•ZipOutputStream(OutputStream out) 创建新的 ZIP 输出流
+•void putNextEntry(ZipEntry e) 设置ZipEntry对象
+•void setComment(String comment) 设置 ZIP 文件注释。
+压缩zip格式文件例子
+public class ZipOutputStreamDemo {
+　　public static void main(String[] args) {
+　　　　File f = new File("temp.txt");
+　　　　File zf = new File("temp.zip");
+　　　　try ( InputStream is = new FileInputStream(f);
+　　　　ZipOutputStream zos = new ZipOutputStream(
+　　　　new FileOutputStream(zf)
+　　　　);
+　　　　) {
+　　　　　　zos.putNextEntry(new ZipEntry(f.getName()));
+　　　　　　zos.setComment("I'm cditcast");
+　　　　　　int len = 0;
+　　　　　　byte[] bys = new byte[1024];
+　　　　　　while ((len = is.read(bys)) != -1) {
+　　　　　　　　zos.write(bys, 0, len);
+　　　　　　}
+　　　　} catch (Exception e) {}
+　　}
+}
+/**
+* 压缩文件夹
+*
+* @author will
+*
+*/
+public class ZipOutputStreamDemo2 {
+　　public static void main(String[] args) {
+　　　　File srcFile = new File("E:\\docs");
+　　　　File destFile = new File("E:/a.zip");
+　　　　compression(srcFile,destFile);
+　　}
+　　private static void compression(File srcFile,File destFile) {
+　　　　try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(destFile));) {
+　　　　zos.setComment("I'm cditcast");
+　　　　preCompression(srcFile, zos);
+　　} catch (Exception e) {
+　　　　e.printStackTrace();
+　　}
+}
+private static void preCompression(File f, ZipOutputStream zos){
+　　if (f.isDirectory()) {
+　　　　File[] fs = f.listFiles();
+　　　　for (File file : fs) {
+　　　　　　if (file.isFile()) {
+　　　　　　　　try (InputStream is = new FileInputStream(file);) {
+　　　　　　　　　　StringBuilder spath=new StringBuilder();
+　　　　　　　　　　String path = f.getPath().substring(f.getPath().indexOf(File.separator)+1);//截掉第一次出现\的前半段
+　　　　　　　　　　spath.append(path).append(File.separator).append(file.getName());
+　　　　　　　　　　System.out.println(spath);
+　　　　　　　　　　zos.putNextEntry(new ZipEntry(spath.toString()));
+　　　　　　　　　　int len = 0;
+　　　　　　　　　　byte[] bys = new byte[1024];
+　　　　　　　　　　while ((len = is.read(bys)) != -1) {
+　　　　　　　　　　　　zos.write(bys, 0, len);
+　　　　　　　　　　}
+　　　　　　　　} catch (IOException e) {}
+　　　　　　　　} else {
+　　　　　　　　　　preCompression(file, zos);
+　　　　　　　　}
+　　　　　　}
+　　　　}
+　　}
+}
+ 
+下面我自己做了个测试
+import java.io.*;
+import java.util.*;
+
+public class Dome {	　　　　　　　　　　　　　　	//主方法
+　　static Scanner sc = new Scanner(System.in);
+　　public static void main(String[] args) throws Exception{
+　　　　neicun();
+　　　　dayin();
+　　　　huanchong();
+　　}
+　　public static void neicun() throws Exception{	　　　　　　　　　　	//定义内存操作流方法
+　　　　System.out.println("下面测试内存操作流,书写内容存向内存中");
+　　　　String nei = sc.next();
+　　　　InputStream input = new ByteArrayInputStream(nei.getBytes());
+　　　　OutputStream output = new ByteArrayOutputStream();
+　　　　int i = 0;
+　　　　while((i=input.read())!= -1){
+　　　　　　output.write(Character.toUpperCase((char)i));
+　　　　}
+　　　　String str = output.toString();
+　　　　input.close();
+　　　　output.close();
+　　　　System.out.println("你刚刚向内存中输入的内容是"+str);
+　　}
+　　private static void dayin() throws Exception {	　　　　　　　　　　	//定义打印流方法
+　　　　PrintStream out = new PrintStream(new FileOutputStream(new File("E://wenjian"+File.separator+"text.txt")));
+　　　　System.out.println("下面测试打印流，请向文件里输入内容");
+　　　　String da = sc.next();
+　　　　out.println(da);
+　　　　out.println("以上是你输入的内容");
+　　　　out.close();
+　　　　System.out.printf("你已经在E盘下wenjian目录下text.txt文件中输入了内容");
+　　}
+　　private static void huanchong() throws Exception {　　　　　　　　　　	//定义缓冲流方法
+　　　　System.out.println("\n已经测试使用缓冲流将AA中的文件复制到BB");
+　　　　BufferedReader br = new BufferedReader(new FileReader("E://wenjian/AA.txt"));
+　　　　BufferedWriter bw = new BufferedWriter(new FileWriter("E://wenjian/BB.txt"));
+　　　　String line = null;
+　　　　while((line=br.readLine()) != null){
+　　　　　　bw.write(line);
+　　　　　　bw.newLine();
+　　　　}
+　　　　bw.close();
+　　　　br.close();
+　　}
+}
