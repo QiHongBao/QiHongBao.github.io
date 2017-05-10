@@ -1,0 +1,210 @@
+类：相同的东西放在一起
+分为属性和动作；
+把一组或多组事物相同的特性的描述==》类
+ 
+属性和动作被称为成员：
+//声明类的属性信息
+public class **{
+String name；
+int age;
+char sex;
+}
+//声明类的动作信息（要在属性信息里面）
+public void eat(){
+System.out.println("eating");
+}
+public void study(){
+System.out.println("study");
+}
+public void playgame(){
+System.out.println("playing");
+}
+类==》抽象化
+类当中的个体才能进行实际的操作
+ 
+抽象化过程
+对象==》类
+具象化过程
+类==》对象
+ 
+面向对象==面向具象化的类；
+ 
+产生对象（主类中）
+student student1 = new student();
+给对象赋值（主类中）
+student.name = "***";
+ 
+构造器：
+实例化的时候自己调用
+构造器名字必须和类名一致，并且没有返回值类型；
+ 
+static 静态的
+类级别的属性 static int ***；
+被static 修饰的方法叫静态方法 只能调用静态属性；
+ 
+匿名对象 只能进行一次调用
+this.代表当前类本身
+ 
+java 对象也可以增删改查
+调用方法可以调用自己 用来循环；
+flage 开关；
+public 公共的 共有
+private 私有 仅自己访问
+protected 子类和父类共有 外部禁止访问
+extends 继承
+将两个类共有的部分抽离出来 过程叫泛化
+抽离出来的类叫父类 被抽离的类叫做子类
+子类继承父类元素 使用 extends ；
+从父类分到子类叫做特化；
+所有类默认继承Object类;
+一个类只能直接继承一个父类 ；
+分为间接继承和直接继承 ；
+间接继承继承父类的父类；
+方法的复写 相当于扩展父类的成员；
+有相同的属性时 显示子类的，父类将被覆盖；
+除非声明调用父类；
+先调用父类构造器，后调用子类构造器；
+super（）调用父类构造器，必须写在第一行；写在子类构造器里面；
+ 
+instanceof （强转换时使用）判断是不是某个类；
+复写规则：（子类）
+一同两小一大
+this （）；调用在有参构造器中调用无参构造器 （必须写在第一行）
+ 
+将其他类型转换成int；
+如果有转换不了的报数字格式化异常
+int ** = Integer.parseInt(***)
+ 
+ArrayIndexOutofBoundsException
+NumberFarmatException 数字格式化异常
+ 
+异常捕获：
+try{}catch(Exception e){}
+String * = i+" ";转换成String型
+ 
+饿汉模式
+懒汉模式
+final定义的变量变为常量；
+下面做一个超市的管理系统：
+import java.util.*;　　　　　　　　　　　　　　　　　　　　　　　　　　//调包
+public class Main{　　　　　　　　　　　　　　　　　　　　　　　　　　//建一个主类
+　　static Scanner sc = new Scanner(System.in);
+　　static int i = 0;
+　　static Chaoshi[] shop = new Chaoshi[100];
+　　public static void main(String[] args){　　　　　　　　　　　　　　//主入口
+　　　　menu();　　　　　　　　　　　　　　　　　　　　　　　　　　　//调用菜单方法
+　　}
+　　public static void menu(){　　　　　　　　　　　　　　　　　　　　//定义一个菜单方法
+　　　　System.out.println("============================");
+　　　　System.out.println("》欢迎进入超市库存统计系统《");
+　　　　System.out.println("=》 请输入对应数字进行操作《");
+　　　　System.out.println("=======》 1,进货存储 《");
+　　　　System.out.println("=======》 2,修改信息 《");
+　　　　System.out.println("=======》 3,查询库存 《");
+　　　　System.out.println("=======》 4,退出操作系统 《");
+　　　　System.out.println("============================");
+　　　　int a = sc.nextInt();　　　　　　　　　　　　　　　　　　　　　　//用户输入
+　　　　switch (a){
+　　　　　　case 1:adds(); break;
+　　　　　　case 2:update(); break;
+　　　　　　case 3:select(); break;
+　　　　　　case 4:exit(); break;
+　　　　　　default:System.out.println("====输入有误，请重新输入====");
+　　　　　　menu();
+　　　　　　break;
+　　　　}
+　　}
+　　public static void adds(){　　　　　　　　　　　　　　　　　　　　　　//定义一个存货方法
+　　　　System.out.println("=========请输入货物名称=========");
+　　　　String sname = sc.next();
+　　　　System.out.println("=========请输入货物类型=========");
+　　　　String sclass = sc.next();
+　　　　System.out.println("=========请输入货物价格=========");
+　　　　String sprice = sc.next();
+　　　　System.out.println("=========请输入货物数量=========");
+　　　　String snum = sc.next();
+　　　　Chaoshi shop1 = new Chaoshi(sname,sclass,sprice,snum);
+　　　　shop[i] = shop1;
+　　　　i++;
+　　　　System.out.println("输入成功，继续输入（1），返回菜单（2）");
+　　　　int flage = sc.nextInt();
+　　　　if(flage==1){
+　　　　　　adds();
+　　　　}else menu();
+　　}
+　　public static void update(){　　　　　　　　　　　　　　　　　　　　　　//定义一个修改方法
+　　　　System.out.println("请输入商品名称，为您修改");
+　　　　String b = sc.next();
+　　　　for(i=0;i<100;i++){
+　　　　　　if(b.equals(shop[i].sname)){
+　　　　　　　　System.out.println("===================查询结果如下===================");
+　　　　　　　　shop[i].say();
+　　　　　　　　System.out.println("=========请输入修改后货物名称=========");
+　　　　　　　　String sname = sc.next();
+　　　　　　　　System.out.println("=========请输入修改后货物类型=========");
+　　　　　　　　String sclass = sc.next();
+　　　　　　　　System.out.println("=========请输入修改后货物价格=========");
+　　　　　　　　String sprice = sc.next();
+　　　　　　　　System.out.println("=========请输入修改后货物数量=========");
+　　　　　　　　String snum = sc.next();
+　　　　　　　　Chaoshi shop1 = new Chaoshi(sname,sclass,sprice,snum);
+　　　　　　　　shop[i] = shop1;
+　　　　　　　　System.out.println("继续修改（1），返回菜单（2）");
+　　　　　　　　int flage = sc.nextInt();
+　　　　　　　　if(flage==1){
+　　　　　　　　　　update();
+　　　　　　　　}else menu();
+　　　　　　}
+　　　　}
+　　}
+　　public static void select(){　　　　　　　　　　　　　　　　　　　　　　//定义一个查询方法
+　　　　System.out.println("指定查询（1），全部查询（2）");
+　　　　int a = sc.nextInt();
+　　　　if(a==1){
+　　　　　　System.out.println("请输入商品名称，为您查询");
+　　　　　　String b = sc.next();
+　　　　　　for(i=0;i<100;i++){
+　　　　　　　　if(b.equals(shop[i].sname)){
+　　　　　　　　　　System.out.println("===================查询结果如下===================");
+　　　　　　　　　　shop[i].say();
+　　　　　　　　　　System.out.println("继续查询（1），返回菜单（2）");
+　　　　　　　　　　int flage = sc.nextInt();
+　　　　　　　　　　if(flage==1){
+　　　　　　　　　　　　select();
+　　　　　　　　　　}else menu();
+　　　　　　　　}
+　　　　　　}
+　　　　}else{
+　　　　　　for(Chaoshi s:shop){
+　　　　　　　　if(s!=null){
+　　　　　　　　s.say();
+　　　　　　　　}
+　　　　　　}
+　　　　　　System.out.println("继续查询（1），返回菜单（2）");
+　　　　　　int flage = sc.nextInt();
+　　　　　　　if(flage==1){
+　　　　　　　　select();
+　　　　　　}else menu();
+　　　　}
+　　}
+　　public static void exit(){　　　　　　　　　　　　　　　　　　　　　　//定义一个退出方法
+　　System.out.println("===》》》您已退出操作系统《《《===");
+　　System.exit(0);
+　　}
+}
+
+public class Chaoshi{　　　　　　　　　　　　　　　　　　　　　　　　　　//新建一个超市类
+　　String sname;
+　　String sclass;
+　　String sprice;
+　　String snum;
+　　public Chaoshi(String sname,String sclass,String sprice,String snum){
+　　　　this.sname = sname;
+　　　　this.sclass = sclass;
+　　　　this.sprice = sprice;
+　　　　this.snum = snum;
+　　}
+　　public void say(){
+　　　　System.out.println("名称:"+sname+"\n种类:"+sclass+"\n价格:"+sprice+"\n数量:"+snum+"\n");　　//定义一个输出方式
+　　}
+}
