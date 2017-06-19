@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>权限管理系统</title>
+	</head>
+	<body>
+		<div class="box">
+			<div class="top">
+				<div class="biao">权限管理系统</div>
+				<div id="sanan">
+					<div class="btn-group">
+						<div class="more dropdown-menu-left waves-effect waves-light waves-ripple" data-toggle="dropdown" id="an1"></div>
+						<div class="dropdown-menu" id="an1xia">
+							<input type="text" class="wenben" />
+							<div class="xiaocha"></div>
+						</div>
+					</div>
+					<div class="btn-group">
+						<div class="more dropdown-menu-left waves-effect waves-light waves-ripple" data-toggle="dropdown" id="an2"></div>
+						<ul class="dropdown-menu" id="an2xia">
+							<li>
+								<a href="#">请选择系统切换</a>
+							</li>
+							<li role="separator" class="divider"></li>
+							<li>
+								<a href="#"><span class="glyphicon glyphicon-lock" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 权限管理系统</a>
+							</li>
+							<li>
+								<a href="#"><span class="glyphicon glyphicon-list-alt" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 内容管理系统</a>
+							</li>
+							<li>
+								<a href="#"><span class="glyphicon glyphicon-usd" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 支付管理系统</a>
+							</li>
+							<li>
+								<a href="#"><span class="glyphicon glyphicon-user" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 用户管理系统</a>
+							</li>
+							<li>
+								<a href="#"><span class="glyphicon glyphicon-cloud-download" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 存储管理系统</a>
+							</li>
+						</ul>
+					</div>
+					<div class="btn-group">
+						<div class="more dropdown-menu-left waves-effect waves-light waves-ripple" data-toggle="dropdown" id="an3"></div>
+						<ul class="dropdown-menu" id="an3xia">
+							<li>
+								<a href="#"><span class="glyphicon glyphicon-fullscreen" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 全屏模式</a>
+							</li>
+							<li>
+								<a href="#"><span class="glyphicon glyphicon-trash" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 清除缓存</a>
+							</li>
+							<li>
+								<a href="#"><span class="glyphicon glyphicon-briefcase" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 隐私管理</a>
+							</li>
+							<li>
+								<a href="#"><span class="glyphicon glyphicon-cog" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 系统设置</a>
+							</li>
+							<li>
+								<a href="#"><span class="glyphicon glyphicon-off" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 退出登录</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="logo">
+				<div class="daohang">
+					<div class="toubu waves-effect waves-light waves-ripple" onclick="nihao()">
+						<div class="touxiang"></div>
+						<div class="nihao">
+							<div class="zhangshuzheng">张恕征,您好!</div>
+							<div class="sanjiao">▼</div>
+						</div>
+					</div>
+					<div id="cang">
+						<div class="cangxiao waves-effect waves-ripple">个人资料</div>
+						<div class="cangxiao waves-effect waves-ripple">隐私管理</div>
+						<div class="cangxiao waves-effect waves-ripple">系统设置</div>
+						<div class="cangxiao waves-effect waves-ripple">退出登录</div>
+					</div>
+					<div class="cangxiao waves-effect waves-ripple" id="shou" onclick="dianshou()"><span class="glyphicon glyphicon-home" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 首页</div>
+					<div class="cangxiao waves-effect waves-ripple" onclick="guan1()"><span class="glyphicon glyphicon-list" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 系统组织管理	<span id="jiahao1">+</span></div>
+					<div id="cang2">
+						<div class="cangxiao waves-effect waves-ripple" onclick="chuangjian(this)">系统管理</div>
+						<div class="cangxiao waves-effect waves-ripple" onclick="chuangjian(this)">组织管理</div>
+					</div>
+					<div class="cangxiao waves-effect waves-ripple" onclick="guan2()"><span class="glyphicon glyphicon-user" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 角色用户管理		<span id="jiahao2">+</span></div>
+					<div id="cang3">
+						<div class="cangxiao waves-effect waves-ripple" onclick="chuangjian(this)">角色资料</div>
+						<div class="cangxiao waves-effect waves-ripple" onclick="chuangjian(this)">用户管理</div>
+					</div>
+					<div class="cangxiao waves-effect waves-ripple" onclick="guan3()"><span class="glyphicon glyphicon-floppy-disk" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 权限资源管理		<span id="jiahao3">+</span></div>
+					<div id="cang4">
+						<div class="cangxiao waves-effect waves-ripple" onclick="chuangjian(this)">权限管理</div>
+					</div>
+					<div class="cangxiao waves-effect waves-ripple" onclick="guan4()"><span class="glyphicon glyphicon-plus-sign" style="color: rgb(16, 75, 74); font-size: 14px;"> </span> 其他数据管理		<span id="jiahao4">+</span></div>
+					<div id="cang5">
+						<div class="cangxiao waves-effect waves-ripple" onclick="chuangjian(this)">公共码表</div>
+						<div class="cangxiao waves-effect waves-ripple" onclick="chuangjian(this)">会话管理</div>
+						<div class="cangxiao waves-effect waves-ripple" onclick="chuangjian(this)">日志记录</div>
+						<div class="cangxiao waves-effect waves-ripple" onclick="chuangjian(this)">键值设置</div>
+					</div>
+					<hr color="#eeeeee" />
+					<div class="shuming">© ZHENG-UPMS V1.0.0</div>
+				</div>
+				<div class="kuangjia">
+					<div id="nav">
+						<div></div>
+						<div class="zzz waves-effect waves-light waves-ripple" id="bubian" onclick="dianle(this)">首页</div>
+						<div class="dropdown bootstrapMenu" style="z-index: 10000; position: absolute; display: none; height: 69px; width: 50px; top: 478px; left: 625px;">
+							<ul class="dropdown-menu" style="position:static;display:block;font-size:0.8em;">
+								<li>
+									<a href="#" role="menuitem">关闭</a>
+								</li>
+								<li>
+									<a href="#" role="menuitem">刷新</a>
+								</li>
+								<li>
+									<a href="#" role="menuitem">关闭左侧所有</a>
+								</li>
+								<li>
+									<a href="#" role="menuitem">关闭右侧所有</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="banner">
+						<iframe src="yanshi.html" id="shoucha" frameborder="no" border="0"></iframe>
+						<iframe src="index.jsp" id="yongcha" frameborder="no" border="0"></iframe>
+						<iframe src="https://www.nimasou.info" id="guancha" frameborder="no" border="0"></iframe>
+						<iframe src="http://www.4399.com/flash/68901_3.htm" id="richa" frameborder="no" border="0"></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<link rel="stylesheet" href="css/index.css" />
+	<link rel="stylesheet" href="css/bootstrap-theme.css" />
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/waves.css" />
+	<link rel="stylesheet" href="css/waves.min.css" />
+	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/BootstrapMenu.min.js"></script>
+	<script type="text/javascript" src="js/waves.js"></script>
+	<script type="text/javascript" src="js/waves.min.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+</html>

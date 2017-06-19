@@ -1,0 +1,47 @@
+::-webkit-scrollbar{
+    width: 0px;
+} /*滚动条样式 */
+body{ margin: 0 0;}
+.box{ width: 100%; height: 643px;}
+.top{ width: 100%; height: 69px; background-color: #29a176; clear: both; border-bottom: #1e7455 solid 1px;}
+.biao{ width: 200px; height: 45px; background: url(../img/biaozhi_01.png) no-repeat; text-align: right; font-size: 16px; font-weight: bold; color: #f1ffff; padding-top: 25px; cursor: pointer; float: left;}
+#sanan{ width: 173px; height: 60px; float: right; padding-top: 20px;}
+.more{ width: 51px; height: 38px; float: left;}
+#an1{ background:url(../img/sousuo.png);}
+#an2{ background: url(../img/hezi.png);}
+#an3{ background: url(../img/gengduo.png);}
+#an1xia{ position: absolute; left: -165px; width: 220px; height: 59px; padding-left: 15px; padding-top: 12px;}
+#an2xia{ position: absolute; left: -110px;}
+#an3xia{ position: absolute; left: -110px;}
+.wenben{ width: 150px; height: 34px; float: left;}
+.xiaocha{ width: 40px; height: 34px; background: url(../img/chazhao.png); float: left;}
+.xiaocha:hover{ background: url(../img/chabian.png);}
+.btn-group>ul>li>a{ font-weight: bold; color: #5E5E5E;}
+.logo{ width: 100%; height: 573px; clear: both;}
+.daohang{ width: 19.7%; height: 573px; border-right: #8C8C8C solid 1px; overflow-y: auto; float: left;}
+.toubu{ width: 100%; height: 130px; background: url(../img/beijing.png); padding-top: 15px;}
+.touxiang{ width: 50px; height: 53px; background: url(../img/touxiang.png); margin-left: 15px;}
+.nihao{ width: 100%; height: 32px; background: black; filter:alpha(Opacity=50);-moz-opacity:0.5;opacity: 0.5; margin-top: 29.5px; padding-top: 5px;}
+.zhangshuzheng{float: left; color: white; width: 100px; text-align: right; height: 16px; font-weight: bold;}
+.sanjiao{float: right; color: white; width: 30px; text-align:left; height: 16px; font-size: 10px;}
+#cang{ width: 100%; height: 190px; display: none;}
+#shou{ margin-top: 15px;}
+#cang2{ width: 100%; height: 83px; display: none;}
+#cang3{ width: 100%; height: 83px; display: none;}
+#cang4{ width: 100%; height: 42px; display: none;}
+#cang5{ width: 100%; height: 190px; display: none;}
+#cang2>div,#cang3>div,#cang4>div,#cang5>div{ color: #9f9f9f; font-weight: 100;}
+#cang2>div:hover,#cang3>div:hover,#cang4>div:hover,#cang5>div:hover{ color: black;}
+.cangxiao{ width: 100%; height: 42px; text-align: center; line-height: 42px; font-weight: bold; color: #5E5E5E;}
+.cangxiao:hover{ color: black;}
+.shuming{ width: 100%; height: 42px; color: #5e5e5e; text-align: center;}
+#nav{ width: 100%; height: 48px; background: #29a176; overflow-x: auto;}
+#bubian{ width: 84px; height: 48px; border-bottom: yellow solid 2px;}
+#nav>div{ line-height: 45px; text-align: center; color: white; float: left;}
+.zzz{ width: 110px; height: 48px; }
+.banner{width: 100%; height: 527px; overflow-y: auto;}
+.kuangjia{ width: 80.3%; height: 573px; float: right;}
+#guancha{display: none; width: 100%;height: 527px;}
+#shoucha{display: block; width: 100%;height: 527px;}
+#richa{display: none; width: 100%;height: 527px;}
+#yongcha{display: none; width: 100%;height: 527px;}
