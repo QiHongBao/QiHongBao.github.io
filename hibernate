@@ -1,0 +1,77 @@
+Hibernate(链接数据库方便得多)！
+首先让我们看一下配置文件，我这里先是用struts搞得controller，不明白struts的可以去百度一下这里就不讲解了：
+
+
+
+之后我们需要做一个hibernate的配置文件内容如下（这里链接的是mysql的数据库）:
+
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/库名</property>
+        <property name="connection.username">用户名</property>
+        <property name="connection.password">密码</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+        <property name="show_sql">true</property>
+        <property name="hbm2ddl.auto">update</property>
+        <mapping resource="mapping/JueAction.hbm.xml"></mapping>
+        <mapping resource="mapping/Quan.hbm.xml"></mapping>
+        <mapping resource="mapping/User.hbm.xml"></mapping>
+    </session-factory>
+</hibernate-configuration>
+等到hibernate这个配置文件写好我们还需要写好每个类的配置文件，用处是整理类之间的关系：
+<?xml version='1.0'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.linyi.bean.（你的类名）" table="（你数据库中的表名）">
+　　　　　//类中与表中的对应的字段
+        <id name="id" column="id">
+　　　　　　//设置这个字段为主键
+            <generator class="native" />
+        </id>
+        <property name="name" column="name" />
+　　　　　　//下面是表中与外表的关系，比如一对一，一对多，多对一，多对多（这里就不详细介绍是什么了，不明白的可以去问度娘）
+　　　　　　//我这里写的是多对多的关系
+        <set name="用来找关系的字段名" table="中间关系表的表名" cascade="save-update">
+            <key column="关系表中用来维护关系的字段名"></key>
+            <many-to-many column="关系表中维护另一个表关系的字段名" class="com.linyi.bean.(这个字段关联的表)" lazy="false"></many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>
+这些配置文件要根据你的类写出来，需要多少就写多少，配置好之后我们就可以运用hibernate了，接下来让我们看一下查询数据是有多便利：
+//这里只是一个测试public class Test1 {
+    //写出你需要调用的方法
+    public List<类名> test1(){
+　　　　//这一段直接考过去就是，虽说有些方法 已经过时了，可还是蛮好用的，不要问我为什么用过时的方法，因为我是菜鸟，别的不会。。
+        Configuration con = new Configuration().configure();
+        SessionFactory sessionFactory = con.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+　　　　//在这里我们就可以使用hql的语句来进行查询了，看起来是不是简单又刺激呢？
+　　　　　//这是一个条件查询，如果你不需要条件，where之后你就不需要哦！
+        String hql = "from com.linyi.bean.（注意这里使用类名就可以哦） where name = :name";
+        Query query = session.createQuery(hql);
+　　　　//这里是用来给语句中的某个变量赋值，可以自己写，也可以从别的类传过来哦！
+        query.setParameter("name","admin1");
+　　　　//我们可以的到这个类的list集合哦！
+        List<类名> 变量名 = query.list();
+        transaction.commit();
+        session.close();
+　　　　　return 变量名;
+    }
+}
+这里需要注意导包
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+这些是hibernate需要用到的包，可以自己去官网下载
+这样的一套下来是不是很简单呢，这里只给大家展示了普通的查询，还有其他的删除，修改，添加之类的大家也可以去
+hibernate官网上去寻找哦！很简单的，方便了好多有木有？
